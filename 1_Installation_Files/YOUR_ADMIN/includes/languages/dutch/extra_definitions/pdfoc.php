@@ -12,5 +12,5 @@
 
 // Admin menu settings
 //
-define('BOX_PDFOC', 'PDF Order Center');
+define('BOX_CONFIGURATION_PDFOC', 'PDF Order Center');
 define('BOX_CUSTOMERS_PDFOC', 'PDF Order Center');
