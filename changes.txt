@@ -1,0 +1,95 @@
+##################################################################
+PDFOC Version 1.2.1 2009-06-28 :: Minor update
+
+- Deleted pdfoc.css in the root of the zip, which shouldn't be there.
+- Updated install.txt with the changed instructions to remove te coupon
+  code link, which causes some html being displayed. (earlier instructions
+  seemed to be not completely correct)
+
+##################################################################
+PDFOC Version 1.2 2009-06-15 (based on PDFOC 1.1.1, and now includes update by Paul Mathot)
+
+- Wonderful update by Paul Mathot for several things, merged with the main package.
+  (details below)
+- Updated the installation instructions according with the update.
+- Updated the installation instructions with a patch for the coupon code issue and iDEAL issue.
+  (this issue causes that there's some HTML displayed when a coupon code is used,
+  or when iDEAL is the payment method.)
+- Updated the English and Dutch translation a little bit.
+- Added a file with upgrade instructions.
+- Removed the EMAIL_DISCLAIMER after the text mail format.
+  This because the newer zen-cart versions seem to add it automatically.
+  
+New features:
+
+1- Disables "Delete Selected Orders" and "Submit Options" when no selection is made
+(to prevent you from accidently updating all orders)
+
+2- Optionally hides the "Print Options" form (not hidden by default )
+
+You can switch this option on and off through this new admin setting of PDFOC:
+Printing: hide Printing Options?
+
+3- Added a js warning popup message to Process Selected orders button. 
+(If this bothers you, you can disable this popup by commenting out the definition of
+PDFOC_MESSAGE_SUBMIT_ARE_YOU_SURE in the PDFOC language file.)
+
+So this enables the warning:
+define('PDFOC_MESSAGE_SUBMIT_ARE_YOU_SURE', 'Process the selected orders?');
+
+And this disables it:
+//define('PDFOC_MESSAGE_SUBMIT_ARE_YOU_SURE', 'Process the selected orders?');
+
+##################################################################
+PDFOC Version 1.1.1 2006-06-10 :: bugfix (v1.1 bug)
+
+Hardcoded db table names resulted in errors on shops using table prefixes.
+
+Changes (line 36 + 37 in admin/pdfoc.php):
+
+replaced:
+[code]
+        $_POST['pull_status'] = $_GET['pull_status'];
+        $orders_query = "select o.orders_id, o.customers_id, o.customers_name, o.date_purchased, o.orders_status, ot.text as order_total from orders o left join orders_total ot on (o.orders_id = ot.orders_id) where (ot.class = 'ot_total') and (o.orders_status = '". zen_db_input(zen_db_prepare_input($_POST['pull_status'])) . "') order by orders_id DESC";
+[/code]
+
+by:
+
+[code]
+        $orders_query = "select o.orders_id, o.customers_id, o.customers_name, o.date_purchased, o.orders_status, ot.text as order_total from " . TABLE_ORDERS . " o left join " . TABLE_ORDERS_TOTAL . " ot on (o.orders_id = ot.orders_id) where (ot.class = 'ot_total') and (o.orders_status = '". zen_db_input(zen_db_prepare_input($_GET['pull_status'])) . "') order by orders_id DESC";
+[/code]
+
+
+##################################################################
+PDFOC Version 1.1 2006-05-26 (based on the 2006-05-24 version of PDFOC 1.0)
+
+Minor modifications done by Paul Mathot, www.beterelektro.nl & www.zen-cart.nl (forum user: paul)
+
+Added quick select (single click) on orders status feature.
+
+Tested on Zen Cart v1.3.01
+
+Changed files (only minor changes have been made):
+
+1) admin\includes\modules\pdfoc\pdfoc_body.php
+
+2) admin\includes\pdfoc.css
+
+3) admin\pdfoc.php
+
+Search for "PDFOC orders statuses" to find the actual changes if you like.
+
+Nederlands:
+
+De mogelijkheid toegevoegd om te kunnen selecteren op orders status d.m.v. één enkele muisklik.
+
+##################################################################
+PDFOC Versions 1.0x and before:
+
+/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ *  By Grayson Morris, 2006
+ *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ *
+ * Released under the Gnu General Public License (see GPL.txt)
+ *
+ */

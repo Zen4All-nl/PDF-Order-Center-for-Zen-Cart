@@ -1,0 +1,21 @@
+/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ *  By Grayson Morris, 2006
+ *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ *
+ *	This 1.5 version is based on Grayson's versions, and includes an incredible update by Paul Mathot.
+ *	For further information, please refer to changes.txt. Should work on 1.3.8a.
+ *
+ * Released under the Gnu General Public License (see GPL.txt)
+ *
+ * upgrade.txt
+ *
+ */
+ 
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+How to upgrade PDF Order Center?
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+To upgrade PDF Order Center, you can just follow the installation manual.
+Please NOTE: When you upgrade, all previous settings of PDFOC will be lost.
+(previously created invoices etc. will not be deleted!)
+During processing the SQL, some errors about tables that could not be created
+could be displayed. You can safely ignore them.

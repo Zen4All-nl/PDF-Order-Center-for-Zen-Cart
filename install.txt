@@ -1,0 +1,252 @@
+/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ *  By Grayson Morris, 2006
+ *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ *
+ *	This 1.2.x version is based on Grayson's versions, and includes an incredible update by Paul Mathot.
+ *	For further information, please refer to changes.txt. Should work on 1.3.8a.
+ *
+ * Released under the Gnu General Public License (see GPL.txt)
+ *
+ * install.txt
+ *
+ */
+
+Acknowledgements: Many thanks to Paul Mathot for brainstorming, initial testing,
+and the benefit of his substantial expertise with CSS.
+Thanks to Marg for the "automatic comments" code.
+Thanks to Anno Klaren and Hawkzx for additional pre-release testing.
+ 
+Happy with PDFOC and want to show it? Then please make a donation to the Zen Cart
+team.
+
+Documentation for the PDF class used in PDFOC can be found at
+http://www.ros.co.nz/pdf/readme.pdf.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+What Is PDF Order Center?
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+PDF Order Center is an alternative to the default ZC order processing setup
+in Admin::Customer::Orders for people who want to print PDF instead of HTML files.
+Like the default setup, PDFOC allows you to update order status, optionally
+including comments, optionally e-mailing the customer; delete an order; and print
+an invoice or packing slip for an order. But PDFOC also allows you to:
+
+      - process multiple orders at a time (batch processing)
+      - print shipping labels
+      - print price quotes and credit invoices
+      - make minor customizations to the invoice format from the PDFOC control panel
+      - create a unique, sequential invoice number for each order
+
+And as the name implies, PDFOC creates PDF invoices, packing slips, etc. PDFOC
+works with a template system, which allows you to easily add additional document
+formats as desired.
+
+For the record: PDFOC is not nearly as comprehensive as the Super Orders contribution
+from BlindSide (Frank Koehl). PDFOC began as a port of Batch Print Center from
+osCommerce to Zen Cart. Along the way I spiffed up the interface and gradually
+expanded it to take over all the functionality of the default Zen Cart orders.php
+page, and added in a couple of extra features. PDFOC is meant to complement Super
+Orders, as an alternative for folks who want to be able to batch-print PDF invoices,
+packing slips, etc. You can use both contributions in your store. See [9] below
+for instructions on integrating PDFOC into SO.
+
+See the online manual (available from the PDFOC page) for more information on how
+PDFOC works and on how to customize the templates. Some information about new features
+is also found in changes.txt. See below to install.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[0] BACK UP your store and database.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[1] Run the queries in the SQL file pdfoc.sql. 
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+---Running the SQL file will cause deletion of all previous PDFOC settings!---
+---           (this won't delete previously created invoices)              ---
+
+This will create the new orders_invoices table (* see below) and add the PDFOC 
+configuration parameters to the configuration table in the database. (If the below 
+sounds like Greek to you, consult the file sounds_like_greek.txt for a lengthier
+explanation.)
+
+You can run the SQL file in one of two ways: either using the 
+Admin::Tools::Install SQL Patches tool, or using a program like phpMyAdmin.
+
+The Admin SQL Patch tool unfortunately chokes when uploading the SQL file (it creates
+an SQL error somehow), so you will need to copy and paste the text from the file
+into the Patch tool instead.
+
+If you run the SQL using phpMyAdmin or similar, remember to manually add your table prefix
+(if you use one) to every table name in the SQL file first. If you forget a prefix
+somewhere (and thus get an SQL error), remember to first remove whatever fields were
+already successfully inserted into your database before rerunning the query. Otherwise
+you may end up with two entries in your Admin::Configuration menu.
+
+There is a line in the SQL file that changes the auto increment value for
+the orders_invoices table. This has the effect of starting off your invoices with
+the number of your choosing (instead of having them start at 1). You should edit
+this value as needed in the corresponding SQL file before running the query. The
+line in question is:
+
+     #ALTER TABLE orders_invoices auto_increment=2060000;
+
+Be sure to remove the # before this line if changing the increment value is necessary.
+
+(* If you have already implemented a different invoicing system, you will need to
+  alter the PDFOC code to use your existing system instead. If you are using OTFIN
+  now, you should be able to continue this installation without further modifications.
+  This table will only be created if it's not there yet.)
+  
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[2] Upload all the files in the contribution to your store, following the exact
+    directory structure.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+No files will be overwritten, and no core files will be modified.
+
+If your store has multiple languages, copy everything in admin/includes/languages/english
+to your other language directories as well. Edit the entries as needed.
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[2b] Create the directory admin/includes/modules/pdfoc/temp_pdf.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+This is where PDFOC will write out the pdf file it creates.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[3] Set the following permissions:
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+/admin/includes/modules/pdfoc                  CHMOD this folder to 755
+/admin/includes/modules/pdfoc/templates        CHMOD this folder to 755
+/admin/includes/modules/pdfoc/fonts            CHMOD this folder to 777
+/admin/includes/modules/pdfoc/temp_pdf         CHMOD this folder to 777
+
+/admin/includes/modules/pdfoc/templates        CHMOD each template file to 755
+/admin/includes/modules/pdfoc/fonts            CHMOD each font file to 755
+
+
+
+Note: If you get errors trying to access the fonts or templates, try setting the 
+folders / files to 777 -- but only if you must; PDFOC should not need write
+access to these files. PDFOC only needs write access to the fonts folder (to
+create php_fontName versions of the fonts, for faster processing) and the
+temp_pdf folder (to write out the pdf file).
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[4] Customize the location of PDFOC in your Admin menu (if desired).
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+The default PDFOC setup places a link to PDFOC in your Customers menu (where Orders is
+also found). If you'd like to place it elsewhere, then change the name of the
+file in the directory admin/includes/boxes/extra_boxes/ accordingly. For example, if
+you'd like to place PDFOC in the Extras menu, rename pdfoc_customers_dhtml.php to
+pdfoc_extras_dhtml.php. That's all there is to it. You can use any of the boxes
+listed in admin/incudes/boxes/ in place of _customers_.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[5] Customize the links and helptext look (if desired).
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+You can change the settings in admin/includes/pdfoc.css to alter the helptext
+color, helptext location, and text decoration for the "click here" link when
+you've created a PDF file.
+
+The PDFOC testers felt that the "click here" link was easy to overlook when you
+first start using PDFOC, so by default that link blinks. If blinking links irritate
+the heck out of you, by all means change this in the css file.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[6] BE SURE TO READ the online PDFOC manual.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+You will save yourself some head-scratching and frustration if you read through
+the manual before you start using PDFOC. Why is the text in the "SOLD TO" box
+too high? What do those "Use" and "Omit" buttons mean? What is this lame
+"all or nothing" credit? It's all in the manual.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[7] Planning to use discount codes or iDEAL (dutch payment method)? Read this!
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+If you use zen-cart 1.3.8. (and probably any 1.3.x version, but I only tried 1.3.8.)
+you will notice that when you try to create an invoice for an order with a discount
+code, that there is some HTML being displayed. A link to an info pop-up causes this.
+See therefore the following solution (by Briann).
+
+The link gets generated in admin/includes/classes/order.php
+
+On line 53 you replace:
+
+$zc_coupon_link = '<a href="javascript:couponpopupWindow(\'' . zen_catalog_href_link(FILENAME_POPUP_COUPON_HELP, 'cID=' . $coupon_link->fields['coupon_id']) . '\')">';
+
+with:
+
+$zc_coupon_link = '';
+(this is not a double quote, but 2 single quotes)
+
+Almost at the end of line 55 you remove:
+
+</a>
+That way it should work. Just a few comments:
+
+- This will cause that the link to the coupon info is removed. You can easily recover the link by restoring the files as they were before.
+- Probably this fix will only work for 1.3.8(a), cause 1.3.7. is a bit different when it comes to this link.
+
+If you use the iDEAL Easy module (and maybe the other modules for iDEAL as well?),
+it's possible that you also get some HTML displayed.
+The easiest solution is to replace the iDEAL logo by text.
+For iDEAL easy the line to edit is in includes/languages/*yourlanguage*/modules/payment/iDeal_EASY.php
+
+Change:
+					define('MODULE_PAYMENT_IDEALEASY_TEXT_TITLE',   '<img src="' .DIR_WS_IMAGES. 'icons/ideal.gif" alt="iDeal" />');
+To:
+					define('MODULE_PAYMENT_IDEALEASY_TEXT_TITLE',   'iDEAL');
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[8] You're finished installing PDFOC. Stop here unless you use Super Orders and
+    want to integrate PDFOC into it.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[9] Do the following to integrate PDFOC into the Super Orders contribution.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[a] Find this code around line 1002 in admin/super_orders.php:
+
+                    <td class="main"><?php echo
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_STATUS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_STATUS, '') . '\'"></FORM>' .
+                      '&nbsp;&nbsp;' .
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_FORMS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_FORMS, '') . '\'"></FORM>';
+                    ?></td>
+
+Replace with this (simply adds a button to go to PDFOC for PDF printing):
+
+                    <td class="main"><?php echo
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_STATUS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_STATUS, '') . '\'"></FORM>' .
+                      '&nbsp;&nbsp;' .
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_FORMS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_FORMS, '') . '\'"></FORM>' .
+                      '&nbsp;&nbsp;' .
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . PDFOC_TEXT_BATCH_PDF_PRINT . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_PDFOC, '') . '\'"></FORM>';
+                    ?></td>
+
+
+[b] Find this code around line 57 in admin/includes/modules/pdfoc/pdfoc_header.php:
+
+          <td class="dataTableHelptext" width="15"><a class="helptextPopup" href="<?php echo zen_href_link(FILENAME_PDFOC,'action=refresh'); ?>"><?php echo PDFOC_HELPTEXT_ICON; ?><span><?php echo PDFOC_GENERAL_HELPTEXT; ?></span></a></td>
+          <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
+          <td class="main" align="left"><?php echo PDFOC_TEXT_HOVER_FOR_HELP; ?></td>
+          <td class="pageHeading" align="right"><?php echo zen_draw_form('pdfoc_manual', FILENAME_PDFOC_MANUAL); ?><input type="submit" value="<?php echo PDFOC_LINK_MANUAL; ?>" /></form></td>
+          <td class="pageHeading" align="right"><?php echo zen_draw_form('pdfoc_main', FILENAME_PDFOC); ?><input type="submit" value="<?php echo PDFOC_LINK_MAINPAGE; ?>" /></form></td>
+
+Replace with this (adds a button to go to super orders main page):
+
+          <td class="dataTableHelptext" width="15"><a class="helptextPopup" href="<?php echo zen_href_link(FILENAME_PDFOC,'action=refresh'); ?>"><?php echo PDFOC_HELPTEXT_ICON; ?><span><?php echo PDFOC_GENERAL_HELPTEXT; ?></span></a></td>
+          <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
+          <td class="main" align="left"><?php echo PDFOC_TEXT_HOVER_FOR_HELP; ?></td>
+          <td class="pageHeading" align="right"><?php echo zen_draw_form('pdfoc_manual', FILENAME_PDFOC_MANUAL); ?><input type="submit" value="<?php echo PDFOC_LINK_MANUAL; ?>" /></form></td>
+          <td class="pageHeading" align="right"><?php echo zen_draw_form('pdfoc_main', FILENAME_PDFOC); ?><input type="submit" value="<?php echo PDFOC_LINK_MAINPAGE; ?>" /></form></td>
+          <td class="pageHeading" align="right"><?php echo zen_draw_form('super_orders_main', FILENAME_SUPER_ORDERS); ?><input type="submit" value="<?php echo PDFOC_LINK_SUPER_ORDERS; ?>" /></form></td>
+

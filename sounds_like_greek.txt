@@ -1,0 +1,39 @@
+/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ *  By Grayson Morris, 2006
+ *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ *
+ * Released under the Gnu General Public License (see GPL.txt)
+ *
+ * sounds_like_greek.txt
+ *
+ */
+
+Some extended instructions for those who need them. The steps below correspond
+to the steps in the install.txt file.
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[1] Create the new orders_invoices table, and add the PDFOC configuration
+    parameters to the configuration table in the database.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+You have the option, when you install ZC, of specifying a prefix to attach to all
+your tables in your database. This is part of the installation process. If you
+specify one, say "zen_", then all the Zen Cart tables in your database will begin
+with "zen_" : zen_configuration, zen_orders, etc. If you don't specify one, then
+these tables will just be configuration, orders, etc.
+
+If you use Admin::Tools::Install SQL Patches to make the database changes in the
+file pdfoc.sql, the tool will automatically insert your DB prefix for you. But if
+you use phpMyAdmin or similar, you'll have to do that yourself. That means add
+"zen_" (or whatever your prefix is) to every table name in that file.
+
+In pdfoc.sql, you'll need to replace the following table names with their prefixed
+versions. You can do a search-and-replace to take care of this. In the list below,
+I'm assuming your prefix is "zen_"; you should, of course, use your actual prefix
+instead.
+
+Replace  orders_invoices       with    zen_orders_invoices
+Replace  configuration_group   with    zen_configuration_group
+Replace  configuration         with    zen_configuration
+
+

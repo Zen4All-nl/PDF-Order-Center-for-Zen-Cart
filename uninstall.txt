@@ -1,0 +1,71 @@
+/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ *  By Grayson Morris, 2006
+ *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ *
+ * Released under the Gnu General Public License (see GPL.txt)
+ *
+ * uninstall.txt
+ *
+ */
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+To Uninstall PDF Order Center
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[0] BACK UP your store and database.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[1] Remove the PDFOC configuration entries from the database.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Run the queries in the SQL file pdfoc_remove.sql, included in the distribution. You can do this in
+one of two ways: either using the Admin::Tools::Install SQL Patches tool, or using
+a program like phpMyAdmin.
+
+The Admin SQL Patch tool unfortunately chokes when loading the SQL file (it creates
+an SQL error somehow), so you will need to copy and paste the text from the file
+into the Patch tool instead.
+
+If you run the SQL using phpMyAdmin or similar, remember to manually add your table prefix
+(if you use one) to every table name in the SQL file first.
+
+There is a second uninstall SQL file: pdfoc_remove_orders_invoices.sql. This will
+drop the orders_invoices table in the database. Only run this query if you no longer
+want to use On-the-Fly Invoice Numbering (OTFIN)! Don't run it if you have
+separately installed OTFIN for use with the regular admin orders page, or if you use
+the table orders_invoices for something else.
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[2] Delete all the files in the contribution from your store, following the exact
+    directory structure.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Because PDFOC does not modify any core files, this is all you need to do to
+completely remove PDFOC from your store.
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[3] If you had integrated PDFOC into the Super Orders contribution, do the
+    following to remove it there.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[a] Find this code around line 1002 in admin/super_orders.php:
+
+                    <td class="main"><?php echo
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_STATUS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_STATUS, '') . '\'"></FORM>' .
+                      '&nbsp;&nbsp;' .
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_FORMS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_FORMS, '') . '\'"></FORM>';
+                      '&nbsp;&nbsp;' .
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . PDFOC_TEXT_BATCH_PDF_PRINT . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_PDFOC, '') . '\'"></FORM>';
+                    ?></td>
+
+Replace with this (simply deletes the button to go to PDFOC for PDF printing):
+
+                    <td class="main"><?php echo
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_STATUS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_STATUS, '') . '\'"></FORM>' .
+                      '&nbsp;&nbsp;' .
+                      '<FORM><INPUT TYPE="BUTTON" VALUE="' . BOX_CUSTOMERS_SUPER_BATCH_FORMS . '" ONCLICK="window.location.href=\'' . zen_href_link(FILENAME_SUPER_BATCH_FORMS, '') . '\'"></FORM>';
+                    ?></td>
+

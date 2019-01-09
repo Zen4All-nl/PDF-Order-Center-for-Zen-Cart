@@ -1,0 +1,107 @@
+/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ *  By Grayson Morris, 2006
+ *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ *
+ * Released under the Gnu General Public License (see GPL.txt)
+ *
+ * admin/includes/pdfoc.css
+ *
+ */
+/* bof PDFOC orders statuses */
+#orderstatuses {
+text-align: center;
+margin: 1em;
+}
+#orderstatuses a {
+margin: 1em;
+}
+.selected {
+color: red;
+}
+/* eof PDFOC orders statuses */
+h1.pdfoc {
+padding-top: 14px;
+}
+
+h2.pdfoc {
+padding-top: 10px;
+}
+
+h3.pdfoc {
+padding-top: 10px;
+}
+
+p.pdfoc {
+font-size: 12px;
+}
+
+.dataTableHelptext {
+  background: #feffa8;
+  text-align: center;
+}
+
+a:hover {
+/* preventing IE hover bug */
+border: none;
+}
+
+.helptextPopup span {display: none; }
+
+a.helptextPopup {
+  position: relative;
+  display: inline;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+
+a.helptextPopup:hover span {
+  display: block;
+  position: absolute;
+  background: #feffa8;
+  color: black;
+  top: 10px;
+  left: 20px;
+  padding: 0.3em;
+  font-weight: normal;
+  width: 20em;
+  text-align: left;
+  z-index: 100;
+  border: 1px solid black;
+}
+
+a#pdfocEnterStatusHelptext:hover span {
+  top: 25px;
+  left: -150px;
+}
+a#pdfocGeneralHelptext:hover span {
+  width: 40em;
+}
+
+.pdfocMessageHeaderRow {
+  background: #dcdd96;
+}
+
+.pdfocMessageHeaderContent {
+  background: #dcdd96;
+  font-weight: bold;
+}
+
+.pdfocMessageRow {
+  background: #feffa8;
+}
+
+.pdfocMessageContent {
+  background: #feffa8;
+}
+
+#pdfocMessageLink {
+/* changes the display of the "click here" link in
+   the PDF file notification message; change as
+   desired */
+
+  text-decoration: blink;
+}
+.pdfocHidden{
+display: none;
+}
