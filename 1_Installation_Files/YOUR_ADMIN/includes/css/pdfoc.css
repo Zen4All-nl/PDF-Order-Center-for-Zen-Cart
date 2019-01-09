@@ -9,7 +9,6 @@
  */
 /* bof PDFOC orders statuses */
 #orderstatuses {
-text-align: center;
 margin: 1em;
 }
 #orderstatuses a {
@@ -19,21 +18,7 @@ margin: 1em;
 color: red;
 }
 /* eof PDFOC orders statuses */
-h1.pdfoc {
-padding-top: 14px;
-}
 
-h2.pdfoc {
-padding-top: 10px;
-}
-
-h3.pdfoc {
-padding-top: 10px;
-}
-
-p.pdfoc {
-font-size: 12px;
-}
 
 .dataTableHelptext {
   background: #feffa8;
@@ -95,13 +80,6 @@ a#pdfocGeneralHelptext:hover span {
   background: #feffa8;
 }
 
-#pdfocMessageLink {
-/* changes the display of the "click here" link in
-   the PDF file notification message; change as
-   desired */
-
-  text-decoration: blink;
-}
 .pdfocHidden{
 display: none;
 }
