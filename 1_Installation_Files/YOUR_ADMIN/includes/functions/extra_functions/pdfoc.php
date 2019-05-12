@@ -21,13 +21,13 @@
 function pdfoc_html_cleanup($input)
 {
 
-  // clean up money &euro; to €
+  // clean up money &euro; to â‚¬
   while (strstr($input, '&euro;'))
-    $input = str_replace('&euro;', '€', $input);
+    $input = str_replace('&euro;', 'â‚¬', $input);
 
-  // clean up money &pound; to £
+  // clean up money &pound; to Â£
   while (strstr($input, '&pound;'))
-    $input = str_replace('&pound;', '£', $input);
+    $input = str_replace('&pound;', 'Â£', $input);
 
   // clean up spaces &nbsp; to ' '
   while (strstr($input, '&nbsp;'))
@@ -103,9 +103,10 @@ function zen_cfg_pull_down_order_statuses_plus_none($order_status_id, $key = '')
   global $db;
   $name = (($key) ? 'configuration[' . $key . ']' : 'configuration_value');
 
-  $statuses_array = [[
-  'id' => '0',
-  'text' => PDFOC_TEXT_NONE]];  // This is defined in admin/includes/languages/english/extra_definitions/pdfoc.php
+  $statuses_array[]= [
+    'id' => '0',
+    'text' => PDFOC_TEXT_NONE];
+
   $statuses = $db->Execute("SELECT orders_status_id, orders_status_name
                             FROM " . TABLE_ORDERS_STATUS . "
                             WHERE language_id = " . (int)$_SESSION['languages_id'] . "
@@ -160,9 +161,9 @@ function pdfoc_cfg_pull_down_templates($template_id, $key = '')
   $directory = DIR_PDFOC_TEMPLATES;
   $resc = opendir($directory);
 
-  $file_type_array = [[
-  'id' => '0',
-  'text' => PDFOC_TEXT_NONE]];  // This is defined in admin/includes/languages/english/extra_definitions/pdfoc.php
+  $file_type_array[] = [
+    'id' => '0',
+    'text' => PDFOC_TEXT_NONE];
   while ($file = readdir($resc)) {
 
     $ext = strrchr($file, ".");
