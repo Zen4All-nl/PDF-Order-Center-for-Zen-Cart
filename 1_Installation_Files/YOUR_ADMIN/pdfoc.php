@@ -1,13 +1,12 @@
 <?php
 /**
- *   PDF Order Center 1.0 for Zen Cart v1.2.6d
- *  By Grayson Morris, 2006
- *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+ * PDF Order Center 1.0 for Zen Cart v1.2.6d
+ * By Grayson Morris, 2006
+ * Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
  *
  * Released under the Gnu General Public License (see GPL.txt)
  *
  * admin/pdfoc.php
- *
  *
  * PHP values:
  *  $_GET params : action, page, oID, mkey, form
