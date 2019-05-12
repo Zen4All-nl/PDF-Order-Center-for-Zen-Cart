@@ -1,11 +1,12 @@
 <?php
-/*  PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
- *  By Grayson Morris, 2006
- *  Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
+/**
+ * PDF Order Center 1.0 for Zen Cart v1.2.6d  and v1.2.7d
+ * By Grayson Morris, 2006
+ * Printing sections based on Batch Print Center for osCommerce by Shaun Flanagan
  *
  * Released under the Gnu General Public License (see GPL.txt)
  *
- *  pdfoc_manual.php
+ * pdfoc_manual.php
  *
  */
 
@@ -15,27 +16,17 @@ require('includes/application_top.php');
 <html <?php echo HTML_PARAMS; ?>>
   <head>
     <meta charset="<?php echo CHARSET; ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo TITLE; ?></title>
     <link rel="stylesheet" href="includes/stylesheet.css">
     <link rel="stylesheet" href="includes/css/pdfoc.css">
-    <link rel="stylesheet" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
-    <script src="includes/menu.js"></script>
     <script src="includes/general.js"></script>
-    <script>
-      function init() {
-          cssjsmenu('navbar');
-          if (document.getElementById) {
-              var kill = document.getElementById('hoverJS');
-              kill.disabled = true;
-          }
-      }
-    </script>
   </head>
-  <body onload="init()">
+  <body>
     <!-- header //-->
     <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
     <!-- header_eof //-->
-    <div id="spiffycalendar" class="text"></div>
     <!-- body //-->
     <div class="container-fluid">
       <!-- body_text //-->
