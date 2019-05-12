@@ -15,7 +15,7 @@ margin: 1em;
 margin: 1em;
 }
 .selected {
-color: red;
+color: #f00;
 }
 /* eof PDFOC orders statuses */
 
@@ -44,7 +44,7 @@ a.helptextPopup:hover span {
   display: block;
   position: absolute;
   background: #feffa8;
-  color: black;
+  color: #000;
   top: 10px;
   left: 20px;
   padding: 0.3em;
@@ -52,7 +52,7 @@ a.helptextPopup:hover span {
   width: 20em;
   text-align: left;
   z-index: 100;
-  border: 1px solid black;
+  border: 1px solid #000;
 }
 
 a#pdfocEnterStatusHelptext:hover span {
